@@ -1,8 +1,7 @@
 # A very simple Flask Hello World app for you to get started with...
 
-from flask import Flask, render_template, redirect, url_for, request
-
-app = Flask(__name__)
+from flask import render_template 
+from app import app
 
 @app.route('/')
 def home():
@@ -12,5 +11,5 @@ def home():
 def login():
   return render_template('login.html')
 
-if __name__ == "__main__":
-  app.run(debug=True)
+#if __name__ == "__main__":
+#  app.run(debug=True)

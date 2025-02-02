@@ -1,0 +1,1 @@
+FLASK_APP=ave6990.py
