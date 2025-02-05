@@ -10,8 +10,8 @@
   <body>
     <div>
       AVE6990:
-      <a href="/index">Home</a>
-      <a href="/login">Войти</a>
+      <a href= {{ url_for('index') }} >Home</a>
+      <a href= {{ url_for('login') }} >Войти</a>
     </div>
     <hr>
     {% with messages = get_flashed_messages() %}
