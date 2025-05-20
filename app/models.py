@@ -20,12 +20,6 @@ class Conditions(db.Model):
   location: so.Mapped[Optional[str]] = so.mapped_column(sa.String(), default='ОЦСМ')
   comment: so.Mapped[Optional[str]] = so.mapped_column(sa.String())
 
-class Channels(db.Model):
-  id: so.Mapped[int] = so.mapped_column(primary_key=True)
-  methodology_id: so.Mapped[int] = so.mapped_column(sa.Integer())
-  channel: so.Mapped[Optional[str]] = so.mapped_column(sa.String())
-  component: so.Mapped[Optional[str]] = so.mapped_column(sa.String())
-
   def __repr__(self):
     return f'<Conditions_{self.id} date: {self.date}>'
 
@@ -43,8 +37,16 @@ class Engineers(db.Model):
   def check_password(self, password):
     return check_password_hash(self.password_hash, password)
 
-  def get_by_id(self, id):
-    pass
+  def get_by_name(self, name):
+    return self.query.filter_by(username=name).first()
 
   def __repr__(self):
     return f'<Engineer_{self.username} {self.number}>'
+
+class Channels(db.Model):
+  id: so.Mapped[int] = so.mapped_column(primary_key=True)
+  methodology_id: so.Mapped[int] = so.mapped_column(sa.Integer())
+  channel: so.Mapped[Optional[str]] = so.mapped_column(sa.String())
+  component: so.Mapped[Optional[str]] = so.mapped_column(sa.String())
+
+

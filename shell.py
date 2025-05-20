@@ -1,13 +1,15 @@
-
 from app import app, db
 from app.models import Conditions, Engineers
 import sqlalchemy as sa
-
 from werkzeug.security import generate_password_hash, check_password_hash
+from importlib import import_module, reload
+import sys
 
-from importlib import reload
+models = import_module('app.models')
 
-reload(app.models.Engineers)
+reload(models)
+
+print(sys.modules)
 
 app.app_context().push()
 
@@ -20,8 +22,8 @@ eng = db.session.scalars(query).all()
 eng[0].password_hash = generate_password_hash(f'{eng[0].number:02}56')
 
 for e in eng:
-  #e.password_hash = generate_password_hash(f'{e.number:02}56')
-  check_password_hash(generate_password_hash(f'{e.number:02}56'), e.password_hash)
+  e.password_hash = generate_password_hash(f'{e.number:02}56')
+  #check_password_hash(e.password_hash, f'{e.number:02}56')
 
 for i in [0, 1, 2]:
   print(i ** 2)

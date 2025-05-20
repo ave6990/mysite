@@ -8,21 +8,34 @@
     <link rel="stylesheet" href="static/styles/main.css">
   </head>
   <body>
-    <div>
-      MetrologyAPP:
+    <header>
+      MetrologyAPP: {{ username }}
       <a href= {{ url_for('index') }} >Поверки</a>
-      <a href= {{ url_for('login') }} >Войти</a>
-    </div>
-    <hr>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul>
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
+      <a href= {{ url_for('conditions') }} >Условия поверки</a>
+      {% if username  %}
+        <a href= {{ url_for('logout') }} >Выйти</a>
+      {% else %}
+        <a href= {{ url_for('login') }} >Войти</a>
       {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
+    </header>
+    <hr>
+    <main>
+      <section id="content">
+        {% block content %}{% endblock %}
+      </section>
+    </main>
+    <footer>
+      <section id="status">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+      </section>
+    </footer>
   </body>
 </html>
