@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, session, request
 from app import app, db
 from app.forms import LoginForm, ConditionsFilter
-import app.models as models 
+import app.models as m
 from sqlalchemy import select, desc
 from config import Config
 
@@ -19,8 +19,8 @@ def login():
   form = LoginForm()
 
   if form.validate_on_submit():
-    #user = models.Engineers.query.filter_by(username=form.username.data).first()
-    user = models.Engineers().get_by_name(form.username.data)
+    #user = m.Engineers.query.filter_by(username=form.username.data).first()
+    user = m.Engineers().get_by_name(form.username.data)
     
     if user is None or not user.check_password(form.password.data):
       flash('Invalid username or password')
@@ -46,7 +46,7 @@ def logout():
 @app.route('/conditions', methods=['GET', 'POST'])
 def conditions():
   form = ConditionsFilter()
-  stmt = select(models.Conditions)
+  stmt = select(m.Conditions)
 
   if form.validate_on_submit():
     date_from = form.date_from.data
@@ -55,13 +55,13 @@ def conditions():
     comment = form.comment.data
 
     if date_from:
-      stmt = stmt.where(models.Conditions.date > date_from)
+      stmt = stmt.where(m.Conditions.date > date_from)
     if date_to:
-      stmt = stmt.where(models.Conditions.date < date_to)
+      stmt = stmt.where(m.Conditions.date < date_to)
     if location:
-      stmt = stmt.where(models.Conditions.location.like(f'%{location}%'))
+      stmt = stmt.where(m.Conditions.location.like(f'%{location}%'))
     if comment:
-      stmt = stmt.where(models.Conditions.comment.like(f'%{comment}%'))
+      stmt = stmt.where(m.Conditions.comment.like(f'%{comment}%'))
 
   if not session.get('logged_in'):
     return redirect(url_for('login'))
@@ -73,7 +73,7 @@ def conditions():
       'comment': request.form.get('comment')
     }
 
-  stmt = stmt.order_by(desc(models.Conditions.date))
+  stmt = stmt.order_by(desc(m.Conditions.date))
   data = db.session.scalars(stmt.limit(Config.RECORDS_LIMIT)).all()
   return render_template('conditions.html', title="Условия поверки",
     username=session.get('username'),
