@@ -9,15 +9,16 @@ m = import_module('app.models')
 reload(app)
 reload(m)
 
-app.app_context().push()
+app.app.app_context().push()
 
 c = m.Conditions(temperature=20.4, humidity=49.2, pressure=101.3)
 c
 
-query = sa.select(Engineers)
+query = sa.select(m.Engineers)
 eng = app.db.session.scalars(query).all()
 
-eng[0].password_hash = generate_password_hash(f'{eng[0].number:02}56')
+eng = app.db.session.query(m.Engineers).limit(2).all()
+print(eng)
 
 for e in eng:
   e.password_hash = generate_password_hash(f'{e.number:02}56')
@@ -27,8 +28,6 @@ for i in [0, 1, 2]:
   print(i ** 2)
 
 generate_password_hash(f'{eng[0].number:02}56')
-
-
 
 app.db.session.rollback()
 
