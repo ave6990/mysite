@@ -2,20 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 
-class LoginForm(FlaskForm):
-  #username = StringField('Имя пользователя', validators = [DataRequired()])
-  username = SelectField('Пользователь', choices=[], validators = [DataRequired()])
-  password = PasswordField('Пароль', validators = [DataRequired()])
-  #remember_me = BooleanField('Запомнить меня')
-  submit = SubmitField('Войти')
-
-class ConditionsFilter(FlaskForm):
-  date_from = StringField('Дата от')
-  date_to = StringField('Дата до')
-  location = StringField('Место')
-  comment = StringField('Комментарий')
-  submit = SubmitField('Фильтровать')
-
 class VerificationsFilter(FlaskForm):
   upload = BooleanField('Выгружено')
   count = StringField('Счет')

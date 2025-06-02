@@ -6,16 +6,41 @@
       {{ title }}
     </title>
     <link rel="stylesheet" href="static/styles/main.css">
+    <script type="module" src="https://pyscript.net/releases/2025.5.1/core.js"></script>
   </head>
   <body>
     <header>
-      MetrologyAPP: {{ username }}
+     <script type="py">
+      from pyscript import display
+      from datetime import datetime
+      now = datetime.now()
+      display(now.strftime("%Y-%m-%d"))
+
+      from js import document
+      from pyodide.ffi import create_proxy
+
+      def button_click(event):
+        tr = event.target.parentNode
+
+        if event.ctrlKey:
+          tr.classList.toggle("selected")
+
+      def setup():
+        click_proxy = create_proxy(button_click)
+        cells = document.getElementsByTagName("td")
+
+        for el in cells:
+          el.addEventListener("click", click_proxy)
+
+      setup()
+     </script>
+     MetrologyAPP: {{ username }}
       <a href= {{ url_for('index') }} >Поверки</a>
-      <a href= {{ url_for('conditions') }} >Условия поверки</a>
+      <a href= {{ url_for('conditions.conditions') }} >Условия поверки</a>
       {% if username  %}
-        <a href= {{ url_for('logout') }} >Выйти</a>
+        <a href= {{ url_for('auth.logout') }} >Выйти</a>
       {% else %}
-        <a href= {{ url_for('login') }} >Войти</a>
+        <a href= {{ url_for('auth.login') }} >Войти</a>
       {% endif %}
     </header>
     <hr>

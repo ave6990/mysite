@@ -4,6 +4,7 @@
   --color-background-contrast: black;
   --color-text: black;
   --color-text-contrast: white;
+  --color-selected: #ddddff;
   --font-size: 10pt;
   --sub-font-size: 8pt;
   --table-border-color: #a4a4a4;
@@ -43,4 +44,8 @@ td[contenteditable^="false"] {
 #status {
   width: 100vw;
   height: 10vh;
+}
+
+.selected {
+  background: var(--color-selected);
 }
