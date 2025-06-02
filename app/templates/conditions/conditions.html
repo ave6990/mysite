@@ -1,0 +1,48 @@
+{% extends "page.html" %}
+{% block content %}
+<form action="" method="post">
+  {{ form.hidden_tag() }}
+  {{ form.date_from.label }}
+  {{ form.date_from() }}
+  {{ form.date_to.label }}
+  {{ form.date_to() }}
+  {{ form.location.label }}
+  {{ form.location() }}
+  {{ form.comment.label }}
+  {{ form.comment() }}
+  {{ form.submit() }}
+</form>
+<table id="conditions">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Дата</th>
+      <th>Температура</th>
+      <th>Влажность</th>
+      <th>Давление</th>
+      <th>Напряжение</th>
+      <th>Частота</th>
+      <th>Прочие</th>
+      <th>Место</th>
+      <th>Комментарии</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rec in data %}
+      <tr>
+        <td class="col:id" contenteditable>{{ rec.id }}</td>
+        <td class="col:date" contenteditable>{{ rec.date }}</td>
+        <td class="col:temperature" contenteditable>{{ rec.temperature }}</td>
+        <td class="col:humidity" contenteditable>{{ rec.humidity }}</td>
+        <td class="col:pressure" contenteditable>{{ rec.pressure }}</td>
+        <td class="col:voltage" contenteditable>{{ rec.voltage }}</td>
+        <td class="col:frequency" contenteditable>{{ rec.frequency }}</td>
+        <td class="col:other" contenteditable>{{ rec.other}}</td>
+        <td class="col:location" contenteditable>{{ rec.location}}</td>
+        <td class="col:comment" contenteditable>{{ rec.comment}}</td>
+      <tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
