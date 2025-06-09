@@ -38,6 +38,7 @@ def conditions():
 
   stmt = stmt.order_by(desc(m.Conditions.date))
   data = db.session.scalars(stmt.limit(Config.RECORDS_LIMIT)).all()
+  print(data)
   return render_template('conditions/conditions.html', title="Условия поверки",
     username=session.get('username'),
     data = data, form = form)
