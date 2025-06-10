@@ -2,6 +2,9 @@
 {% block content %}
 <form action="" method="post">
   {{ form.hidden_tag() }}
+  {{ form.page.label }}
+  {{ form.page() }}
+  <span> из </span> {{ count }} <span> записей. </span>
   {{ form.date_from.label }}
   {{ form.date_from() }}
   {{ form.date_to.label }}

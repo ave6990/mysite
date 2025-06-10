@@ -3,42 +3,51 @@ from app import db
 from app.conditions import bp
 from app.conditions.forms import ConditionsFilter
 import app.models as m
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, func, or_
 from config import Config
 
 @bp.route('/conditions', methods=['GET', 'POST'])
 def conditions():
   form = ConditionsFilter()
   stmt = select(m.Conditions)
-
-  if form.validate_on_submit():
-    date_from = form.date_from.data
-    date_to = form.date_to.data
-    location = form.location.data
-    comment = form.comment.data
-
-    if date_from:
-      stmt = stmt.where(m.Conditions.date > date_from)
-    if date_to:
-      stmt = stmt.where(m.Conditions.date < date_to)
-    if location:
-      stmt = stmt.where(m.Conditions.location.like(f'%{location}%'))
-    if comment:
-      stmt = stmt.where(m.Conditions.comment.like(f'%{comment}%'))
+  filters = {
+    'page': 1,
+    'date_from': '',
+    'date_to': '',
+    'location': '',
+    'comment': ''
+  }
 
   if not session.get('logged_in'):
     return redirect(url_for('auth.login'))
   if request.method == 'POST':
     filters = {
+      'page': request.form.get('page'),
       'date_from': request.form.get('date_from'),
       'date_to': request.form.get('date_to'),
       'location': request.form.get('location'),
       'comment': request.form.get('comment')
     }
 
-  stmt = stmt.order_by(desc(m.Conditions.date))
-  data = db.session.scalars(stmt.limit(Config.RECORDS_LIMIT)).all()
-  print(data)
+  if filters['date_from'] != '':
+    stmt = stmt.where(m.Conditions.date > filters['date_from'])
+  if filters['date_to'] != '':
+    stmt = stmt.where(m.Conditions.date < filters['date_to'])
+
+  stmt = (
+    stmt.where(or_(m.Conditions.location.like(f'%{filters["location"]}%'),
+                  m.Conditions.location == None))
+    .where(or_(m.Conditions.comment.like(f'%{filters["comment"]}%'),
+              m.Conditions.comment == None))
+    .order_by(desc(m.Conditions.date))
+    .limit(Config.RECORDS_LIMIT)
+    .offset((int(filters['page']) - 1) * Config.RECORDS_LIMIT)
+  )
+
+  data = db.session.scalars(stmt).all()
+
+  count = (db.session.scalars(select(func.count(m.Conditions.id))).first())
+
   return render_template('conditions/conditions.html', title="Условия поверки",
     username=session.get('username'),
-    data = data, form = form)
+    data = data, count = count, form = form)

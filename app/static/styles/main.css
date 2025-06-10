@@ -10,6 +10,7 @@
   --table-border-color: #a4a4a4;
 }
 
+/* Main styles */
 html {
   margin: 0;
   padding: 0;
@@ -78,6 +79,11 @@ td[contenteditable^="false"] {
   background: var(--color-passive);
 }
 
+.selected {
+  background: var(--color-selected);
+}
+
+/* Menu styles */
 #main-menu a {
   padding: 6px 6px;
   color: var(--color-text);
@@ -93,10 +99,6 @@ td[contenteditable^="false"] {
 #status {
   width: 100vw;
   height: 10vh;
-}
-
-.selected {
-  background: var(--color-selected);
 }
 
 .context-menu {
@@ -140,6 +142,7 @@ td[contenteditable^="false"] {
   color: var(--color-text);
 }
 
+/* Popups */
 .popup {
   display: none;
   position: absolute;
